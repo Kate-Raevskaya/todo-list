@@ -1,0 +1,35 @@
+.taskCard
+  border: 1px solid #ddd
+  padding: 0 10px
+  background-color: #f9f9f9
+  border-radius: 8px
+  font-size: 15px
+  width: 100%
+  height: fit-content
+  cursor: grab
+  box-sizing: border-box
+
+  &:active
+    cursor: grabbing
+
+  &.queue
+    border-left: 5px solid #ffcc00
+    &.draggingTask
+      color: #f9f9f9
+      border: 3px solid #ffcc00
+
+  &.done
+    border-left: 5px solid #28a745
+    &.draggingTask
+      color: #f9f9f9
+      border: 3px solid #28a745
+
+  &.development
+    border-left: 5px solid #007bff
+    &.draggingTask
+      color: #f9f9f9
+      border: 3px solid #007bff
+
+  h4
+    margin: 5px
+    text-decoration: underline

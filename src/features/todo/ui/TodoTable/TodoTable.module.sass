@@ -1,0 +1,37 @@
+.todoContainer
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 40px
+  padding: 20px 40px
+  min-height: fit-content
+
+.colContainer
+  display: flex
+  flex-direction: column
+  align-items: center
+  border: 1px solid #ddd
+  width: 100%
+  min-height: fit-content
+  background-color: white
+
+  &.colEmpty
+    opacity: 50
+    border: 2px solid #007bff
+  .title
+    text-align: center
+    font-size: 24px
+    font-weight: bold
+    width: 100%
+    background-color: #f4f4f4
+    cursor: grab
+    &:active
+      cursor: grabbing
+
+.tasksContainer
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 15px
+  width: 100%
+  padding: 15px
+  box-sizing: border-box
