@@ -189,6 +189,25 @@ export const projects: Project[] = [
         subTasks: [],
         comments: [],
       },
+      {
+        id: 7,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "queue",
+        subTasks: [],
+        comments: [],
+      },
     ],
   },
   {
