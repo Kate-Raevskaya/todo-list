@@ -19,3 +19,7 @@ export const getAllProjects = (state: RootState) => {
 export const getCurrentProject = (state: RootState) => {
   return state.projects.currentProject
 }
+
+export const getAllComments = (state: RootState, parentId: number | null) => {
+  return state.comments.filter(comment => comment.parentCommentId === parentId)
+}

@@ -2,7 +2,10 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
 
+import { initializeComments } from "../../../../app/commentsSlice.ts"
+import { getCommentForTask } from "../../../../shared/api/comments.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
+import { useAppDispatch } from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
 import { CreateTaskForm } from "../CreateTaskForm/CreateTaskForm.tsx"
 import cls from "./TaskCard.module.sass"
@@ -27,11 +30,15 @@ export const TaskCard = ({ task }: Props) => {
       task,
     },
   })
+  const dispatch = useAppDispatch()
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
-  const handleOpenModal = () => setIsModalOpen(true)
+  const handleOpenModal = () => {
+    dispatch(initializeComments(getCommentForTask(task.id)))
+    setIsModalOpen(true)
+  }
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setIsEditMode(false)

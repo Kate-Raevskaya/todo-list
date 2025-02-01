@@ -34,7 +34,7 @@ const Projects = () => {
   const addNewProject = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const newProject: Project = {
-      id: Math.random(),
+      id: -1,
       name: projectTitle,
     }
     dispatch(addProject(newProject))

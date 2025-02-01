@@ -29,7 +29,7 @@ export const CreateTaskForm = ({
   const dispatch = useAppDispatch()
   const [myTask, setMyTask] = useState<Task>(
     task || {
-      id: Math.floor(Math.random() * 100000),
+      id: -1,
       projectId: currentProject!,
       title: "",
       description: "",
@@ -40,7 +40,6 @@ export const CreateTaskForm = ({
       files: [],
       currentStatus: "queue",
       subTasks: [],
-      comments: [],
     },
   )
 

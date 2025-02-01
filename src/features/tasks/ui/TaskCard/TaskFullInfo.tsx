@@ -1,5 +1,6 @@
 import { getAllTasks } from "../../../../app/selectors.ts"
 import { deleteTask } from "../../../../app/tasksSlice.ts"
+import { Comments } from "../../../../shared/components/Comments.tsx"
 import {
   useAppDispatch,
   useAppSelector,
@@ -83,7 +84,7 @@ export const TaskFullInfo = ({ task, onCloseModal, onChangeIsEdit }: Props) => {
 
       <div>
         <h4>Комментарии:</h4>
-        {/*<Comments comments={task.comments} />*/}
+        <Comments taskId={task.id} parentId={null} />
       </div>
     </div>
   )

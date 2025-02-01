@@ -17,7 +17,6 @@ export type Task = {
   files: TaskFile[]
   currentStatus: Status
   subTasks: number[]
-  comments: number[]
 }
 
 export type TaskFile = {
@@ -28,8 +27,9 @@ export type TaskFile = {
 
 export type Comment = {
   id: number
+  taskId: number
+  parentCommentId: number | null
   text: string
   date: string
   author: string
-  replies: number[]
 }

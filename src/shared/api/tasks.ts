@@ -1,3 +1,4 @@
+import { getNextId } from "../hepers/getMaxId.ts"
 import type { Status, Task } from "../model/projects.types.ts"
 
 export const getProjectTasks = (projectId: number): Task[] => {
@@ -10,15 +11,20 @@ export const getProjectTasks = (projectId: number): Task[] => {
   )
 }
 
-export const addTask = (task: Task) => {
+export const addTask = (task: Task): number => {
   const tasksData = localStorage.getItem("tasks")
   if (tasksData) {
     const tasks = JSON.parse(tasksData)
+    const nextId = getNextId(tasks)
+    task.id = nextId
     tasks.push(task)
     localStorage.setItem("tasks", JSON.stringify(tasks))
+    return nextId
   } else {
     const tasks: Task[] = [task]
+    task.id = 0
     localStorage.setItem("tasks", JSON.stringify(tasks))
+    return 0
   }
 }
 
