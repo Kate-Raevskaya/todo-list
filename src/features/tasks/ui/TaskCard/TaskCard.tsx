@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import { CreateTaskForm } from "../CreateTaskForm/CreateTaskForm.tsx"
 import cls from "./TaskCard.module.sass"
 import { TaskFullInfo } from "./TaskFullInfo.tsx"
 
@@ -28,9 +29,15 @@ export const TaskCard = ({ task }: Props) => {
   })
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isEditMode, setIsEditMode] = useState<boolean>(false)
 
   const handleOpenModal = () => setIsModalOpen(true)
-  const handleCloseModal = () => setIsModalOpen(false)
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setIsEditMode(false)
+    return
+  }
+  const handeChangeEditMode = () => setIsEditMode(!isEditMode)
 
   const style = {
     transition,
@@ -77,7 +84,19 @@ export const TaskCard = ({ task }: Props) => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <TaskFullInfo task={task} />
+        {isEditMode ? (
+          <CreateTaskForm
+            task={task}
+            onCloseModal={handleCloseModal}
+            mode="edit"
+          />
+        ) : (
+          <TaskFullInfo
+            task={task}
+            onCloseModal={handleCloseModal}
+            onChangeIsEdit={handeChangeEditMode}
+          />
+        )}
       </Modal>
     </>
   )

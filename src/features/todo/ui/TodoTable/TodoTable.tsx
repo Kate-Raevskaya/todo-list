@@ -5,14 +5,22 @@ import {
   DragOverlay,
   type DragStartEvent,
   PointerSensor,
+  closestCenter,
+  closestCorners,
+  pointerWithin,
   useSensor,
   useSensors,
 } from "@dnd-kit/core"
 import { SortableContext, arrayMove } from "@dnd-kit/sortable"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
-import { getTasks } from "../../../../shared/api/projects.ts"
+import { getAllTasks, getFilteredTasks } from "../../../../app/selectors.ts"
+import { initializeTasks, moveTask } from "../../../../app/tasksSlice.ts"
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
 import { TaskCard } from "../../../tasks/ui/TaskCard/TaskCard.tsx"
 import { getAllColumns } from "../../model/api.ts"
@@ -22,10 +30,14 @@ import cls from "./TodoTable.module.sass"
 
 type Props = {
   projectId: number
+  filter: string
 }
 
-export const TodoTable = ({ projectId }: Props) => {
-  const [tasks, setTasks] = useState<Task[]>(() => getTasks(projectId))
+export const TodoTable = ({ projectId, filter }: Props) => {
+  const tasks = useAppSelector(getFilteredTasks(filter))
+  const dispatch = useAppDispatch()
+  const timeout = useRef<NodeJS.Timeout>()
+  // const [tasks, setTasks] = useState<Task[]>(useAppSelector(getAllTasks))
   const [columns, setColumns] = useState<Column[]>(getAllColumns)
 
   const columnsId = useMemo(() => columns.map(col => col.id), [columns])
@@ -104,34 +116,51 @@ export const TodoTable = ({ projectId }: Props) => {
 
     //dropping a task over another task
     if (isActiveTask && isOverTask) {
-      setTasks(tasks => {
+      clearTimeout(timeout.current)
+      timeout.current = setTimeout(() => {
         const activeIndex = tasks.findIndex(task => task.id === activeId)
         const overIndex = tasks.findIndex(task => task.id === overId)
+        dispatch(
+          moveTask(tasks[overIndex].currentStatus, activeIndex, overIndex),
+        )
+      }, 10)
 
-        tasks[activeIndex].currentStatus = tasks[overIndex].currentStatus
-
-        return arrayMove(tasks, activeIndex, overIndex)
-      })
+      // setTasks(tasks => {
+      //   const activeIndex = tasks.findIndex(task => task.id === activeId)
+      //   const overIndex = tasks.findIndex(task => task.id === overId)
+      //
+      //   tasks[activeIndex].currentStatus = tasks[overIndex].currentStatus
+      //
+      //   return arrayMove(tasks, activeIndex, overIndex)
+      // })
     }
-    //dropping a task over a column
+    // dropping a task over a column
     const isOverColumn = over.data.current?.type === "Column"
 
     if (isActiveTask && isOverColumn) {
-      setTasks(tasks => {
+      clearTimeout(timeout.current)
+      timeout.current = setTimeout(() => {
         const activeIndex = tasks.findIndex(task => task.id === activeId)
-
         const column = columns.find(column => column.id === overId)
+        dispatch(moveTask(column!.id, activeIndex, tasks.length - 1))
+      }, 10)
 
-        tasks[activeIndex].currentStatus = column!.id
-
-        return arrayMove(tasks, activeIndex, tasks.length)
-      })
+      // setTasks(tasks => {
+      //   const activeIndex = tasks.findIndex(task => task.id === activeId)
+      //
+      //   const column = columns.find(column => column.id === overId)
+      //
+      //   tasks[activeIndex].currentStatus = column!.id
+      //
+      //   return arrayMove(tasks, activeIndex, tasks.length)
+      // })
     }
   }
 
   return (
     <div className={cls.todoContainer}>
       <DndContext
+        collisionDetection={pointerWithin}
         sensors={sensors}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}

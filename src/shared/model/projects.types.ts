@@ -4,8 +4,10 @@ export type Project = {
   tasks: Task[]
 }
 
+export type Status = "queue" | "done" | "development"
+
 export type Task = {
-  id: number | string
+  id: number
   title: string
   description: string
   createdDate: string
@@ -13,8 +15,8 @@ export type Task = {
   endDate: string
   priority: "low" | "medium" | "high"
   files: TaskFile[]
-  currentStatus: "queue" | "done" | "development"
-  subTasks: Task[]
+  currentStatus: Status
+  subTasks: number[]
   comments: Comment[]
 }
 

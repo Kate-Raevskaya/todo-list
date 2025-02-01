@@ -27,34 +27,7 @@ export const projects: Project[] = [
           },
         ],
         currentStatus: "development",
-        subTasks: [
-          {
-            id: 2,
-            title: "Создание UI для фильтрации",
-            description: "Создать интерфейс для выбора фильтров.",
-            createdDate: "2025-01-01",
-            timeInProgress: "1 день",
-            endDate: "2025-01-02",
-            priority: "medium",
-            files: [],
-            currentStatus: "done",
-            subTasks: [],
-            comments: [],
-          },
-          {
-            id: 3,
-            title: "Написание логики фильтрации",
-            description: "Разработка логики фильтрации данных на сервере.",
-            createdDate: "2025-01-01",
-            timeInProgress: "2 дня",
-            endDate: "2025-01-03",
-            priority: "high",
-            files: [],
-            currentStatus: "development",
-            subTasks: [],
-            comments: [],
-          },
-        ],
+        subTasks: [34, 35],
         comments: [
           {
             id: 1,
@@ -74,7 +47,7 @@ export const projects: Project[] = [
         ],
       },
       {
-        id: 2,
+        id: 34,
         title: "Исправление бага с отображением на мобильных устройствах",
         description:
           "На мобильных устройствах кнопки не отображаются корректно.",
@@ -96,7 +69,7 @@ export const projects: Project[] = [
         ],
       },
       {
-        id: 3,
+        id: 35,
         title: "Разработка страницы профиля пользователя",
         description:
           "Разработать страницу для отображения профиля пользователя.",
@@ -213,11 +186,108 @@ export const projects: Project[] = [
   {
     id: 2,
     name: "project2",
-    tasks: [],
+    tasks: [
+      {
+        id: 7,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "queue",
+        subTasks: [],
+        comments: [],
+      },
+      {
+        id: 8,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "done",
+        subTasks: [],
+        comments: [],
+      },
+      {
+        id: 9,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "development",
+        subTasks: [],
+        comments: [],
+      },
+    ],
   },
   {
     id: 3,
     name: "project3",
-    tasks: [],
+    tasks: [
+      {
+        id: 10,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "queue",
+        subTasks: [],
+        comments: [],
+      },
+      {
+        id: 7,
+        title: "Разработка документации по API",
+        description: "Создание документации для API проекта.",
+        createdDate: "2025-01-15",
+        timeInProgress: "4 дня",
+        endDate: "2025-01-19",
+        priority: "low",
+        files: [
+          {
+            id: 1,
+            name: "api_documentation_template.md",
+            url: "",
+          },
+        ],
+        currentStatus: "development",
+        subTasks: [],
+        comments: [],
+      },
+    ],
   },
 ]

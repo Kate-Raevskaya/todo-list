@@ -1,47 +1,37 @@
-import type { Comment, Task } from "../../../../shared/model/projects.types.ts"
+import { getAllTasks } from "../../../../app/selectors.ts"
+import { deleteTask } from "../../../../app/tasksSlice.ts"
+import { Comments } from "../../../../shared/components/Comments.tsx"
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../shared/hooks/store-hooks.ts"
+import type { Task } from "../../../../shared/model/projects.types.ts"
+import { SubTasks } from "./SubTasks.tsx"
 import cls from "./TaskFullInfo.module.sass"
 
 type Props = {
   task: Task
+  onCloseModal: () => void
+  onChangeIsEdit: () => void
 }
 
-export const TaskFullInfo = ({ task }: Props) => {
-  const renderSubTasks = (subTasks: Task[]) => {
-    return subTasks.length > 0 ? (
-      <ul>
-        {subTasks.map(subTask => (
-          <li key={subTask.id}>{subTask.title}</li>
-        ))}
-      </ul>
-    ) : (
-      <p>Нет подзадач</p>
-    )
+export const TaskFullInfo = ({ task, onCloseModal, onChangeIsEdit }: Props) => {
+  const allTasks = useAppSelector(getAllTasks)
+  const dispatch = useAppDispatch()
+
+  const subTasks: Task[] = allTasks.filter(t =>
+    task.subTasks.find(id => id === t.id),
+  )
+
+  const onDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    dispatch(deleteTask(task.id))
+    onCloseModal()
   }
 
-  const renderComments = (comments: Comment[]) => {
-    return comments.length > 0 ? (
-      <div className={cls.comments}>
-        {comments.map(comment => (
-          <div key={comment.id} className={cls.comment}>
-            <p>
-              <span>{comment.author}</span> ({comment.date}):
-            </p>
-            <p>{comment.text}</p>
-            {comment.replies.length > 0 && (
-              <div className={cls.replies}>
-                {renderComments(comment.replies)}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    ) : (
-      <p>Нет комментариев</p>
-    )
+  const onEdit = () => {
+    onChangeIsEdit()
   }
-
-  const onDelete = () => {}
-  const onEdit = () => {}
 
   return (
     <div className={cls.container}>
@@ -89,12 +79,12 @@ export const TaskFullInfo = ({ task }: Props) => {
 
       <div>
         <h4>Подзадачи:</h4>
-        {renderSubTasks(task.subTasks)}
+        <SubTasks subTasks={subTasks} />
       </div>
 
       <div>
         <h4>Комментарии:</h4>
-        {renderComments(task.comments)}
+        <Comments comments={task.comments} />
       </div>
     </div>
   )
