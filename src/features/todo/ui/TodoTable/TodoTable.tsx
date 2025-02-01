@@ -5,18 +5,17 @@ import {
   DragOverlay,
   type DragStartEvent,
   PointerSensor,
-  closestCenter,
-  closestCorners,
   pointerWithin,
   useSensor,
   useSensors,
 } from "@dnd-kit/core"
 import { SortableContext, arrayMove } from "@dnd-kit/sortable"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
+import { shallowEqual } from "react-redux"
 
-import { getAllTasks, getFilteredTasks } from "../../../../app/selectors.ts"
-import { initializeTasks, moveTask } from "../../../../app/tasksSlice.ts"
+import { getFilteredTasks } from "../../../../app/selectors.ts"
+import { moveTask } from "../../../../app/tasksSlice.ts"
 import {
   useAppDispatch,
   useAppSelector,
@@ -34,10 +33,12 @@ type Props = {
 }
 
 export const TodoTable = ({ projectId, filter }: Props) => {
-  const tasks = useAppSelector(getFilteredTasks(filter))
+  const tasks = useAppSelector(
+    state => getFilteredTasks(state, filter),
+    shallowEqual,
+  )
   const dispatch = useAppDispatch()
   const timeout = useRef<NodeJS.Timeout>()
-  // const [tasks, setTasks] = useState<Task[]>(useAppSelector(getAllTasks))
   const [columns, setColumns] = useState<Column[]>(getAllColumns)
 
   const columnsId = useMemo(() => columns.map(col => col.id), [columns])
@@ -124,15 +125,6 @@ export const TodoTable = ({ projectId, filter }: Props) => {
           moveTask(tasks[overIndex].currentStatus, activeIndex, overIndex),
         )
       }, 10)
-
-      // setTasks(tasks => {
-      //   const activeIndex = tasks.findIndex(task => task.id === activeId)
-      //   const overIndex = tasks.findIndex(task => task.id === overId)
-      //
-      //   tasks[activeIndex].currentStatus = tasks[overIndex].currentStatus
-      //
-      //   return arrayMove(tasks, activeIndex, overIndex)
-      // })
     }
     // dropping a task over a column
     const isOverColumn = over.data.current?.type === "Column"
@@ -144,16 +136,6 @@ export const TodoTable = ({ projectId, filter }: Props) => {
         const column = columns.find(column => column.id === overId)
         dispatch(moveTask(column!.id, activeIndex, tasks.length - 1))
       }, 10)
-
-      // setTasks(tasks => {
-      //   const activeIndex = tasks.findIndex(task => task.id === activeId)
-      //
-      //   const column = columns.find(column => column.id === overId)
-      //
-      //   tasks[activeIndex].currentStatus = column!.id
-      //
-      //   return arrayMove(tasks, activeIndex, tasks.length)
-      // })
     }
   }
 

@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { getAllTasks } from "../../../../app/selectors.ts"
+import { getAllTasks, getCurrentProject } from "../../../../app/selectors.ts"
 import { addTask, editTask } from "../../../../app/tasksSlice.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import {
@@ -25,10 +25,12 @@ export const CreateTaskForm = ({
   onAddSubTask,
 }: Props) => {
   const allTasks = useAppSelector(getAllTasks)
+  const currentProject = useAppSelector(getCurrentProject)
   const dispatch = useAppDispatch()
   const [myTask, setMyTask] = useState<Task>(
     task || {
-      id: Math.floor(Math.random() * 10000),
+      id: Math.floor(Math.random() * 100000),
+      projectId: currentProject!,
       title: "",
       description: "",
       createdDate: new Date().toISOString().split("T")[0],
@@ -57,7 +59,8 @@ export const CreateTaskForm = ({
   const handleChangeTask = (
     e:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>,
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     e.preventDefault()
     const { name, value } = e.target
@@ -72,7 +75,6 @@ export const CreateTaskForm = ({
 
   const handleAddSubTask = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    // dispatch(editTask(myTask))
     handleOpenModal()
   }
 
@@ -111,14 +113,14 @@ export const CreateTaskForm = ({
             <input
               type="text"
               name="title"
+              required={true}
               value={myTask?.title}
               onChange={handleChangeTask}
             />
           </label>
           <label>
             <p>Описание</p>
-            <input
-              type="text"
+            <textarea
               name="description"
               value={myTask?.description}
               onChange={handleChangeTask}
@@ -136,7 +138,7 @@ export const CreateTaskForm = ({
           <label>
             <p>Дата окончания</p>
             <input
-              type="text"
+              type="date"
               name="endDate"
               value={myTask?.endDate}
               onChange={handleChangeTask}

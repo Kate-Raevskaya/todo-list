@@ -1,15 +1,27 @@
-import { combineReducers, compose, createStore } from "redux"
+import {
+  applyMiddleware,
+  combineReducers,
+  legacy_createStore as createStore,
+} from "redux"
 
+import { commentsReducer } from "./commentsSlice.ts"
+import { projectsMiddleware } from "./middlewares.ts"
+import { projectsReducer } from "./projectsSlice.ts"
 import { tasksReducer } from "./tasksSlice.ts"
+
+const middlewares = [projectsMiddleware]
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
+  projects: projectsReducer,
+  comments: commentsReducer,
 })
 
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() || compose
-
-export const store = createStore(rootReducer, composeEnhancers)
+export const store = createStore(
+  rootReducer,
+  undefined,
+  applyMiddleware(...middlewares),
+)
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch

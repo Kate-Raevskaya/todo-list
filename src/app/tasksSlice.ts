@@ -5,15 +5,13 @@ type TaskAction =
   | { type: "DELETE_TASK"; payload: number }
   | { type: "EDIT_TASK"; payload: Task }
   | { type: "INITIALIZE_TASKS"; payload: Task[] }
-  | { type: "CLEAR_TASKS"; payload: Task[] }
   | { type: "MOVE_TASK"; payload: { status: Status; from: number; to: number } }
 
-const ADD_TASK = "ADD_TASK"
-const DELETE_TASK = "DELETE_TASK"
-const EDIT_TASK = "EDIT_TASK"
-const INITIALIZE_TASKS = "INITIALIZE_TASKS"
-const CLEAR_TASKS = "CLEAR_TASKS"
-const MOVE_TASK = "MOVE_TASK"
+export const ADD_TASK = "ADD_TASK"
+export const DELETE_TASK = "DELETE_TASK"
+export const EDIT_TASK = "EDIT_TASK"
+export const INITIALIZE_TASKS = "INITIALIZE_TASKS"
+export const MOVE_TASK = "MOVE_TASK"
 
 export const addTask = (task: Task): TaskAction => ({
   type: ADD_TASK,
@@ -31,10 +29,7 @@ export const initializeTasks = (tasks: Task[]): TaskAction => ({
   type: INITIALIZE_TASKS,
   payload: tasks,
 })
-export const clearTask = (tasks: Task[]): TaskAction => ({
-  type: CLEAR_TASKS,
-  payload: tasks,
-})
+
 export const moveTask = (
   status: Status,
   from: number,
@@ -73,8 +68,6 @@ export const tasksReducer = (
     }
     case INITIALIZE_TASKS:
       return action.payload
-    case CLEAR_TASKS:
-      return []
     default:
       return state
   }
