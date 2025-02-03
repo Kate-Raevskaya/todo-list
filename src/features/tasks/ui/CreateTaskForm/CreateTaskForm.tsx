@@ -1,8 +1,13 @@
+import type { FilePondInitialFile } from "filepond"
+import "filepond/dist/filepond.min.css"
 import { useState } from "react"
+import { FilePond } from "react-filepond"
 
 import { getAllTasks, getCurrentProject } from "../../../../app/selectors.ts"
 import { addTask, editTask } from "../../../../app/tasksSlice.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
+import { dateNow } from "../../../../shared/hepers/date-transform.ts"
+import { saveFile } from "../../../../shared/hepers/files.ts"
 import {
   useAppDispatch,
   useAppSelector,
@@ -33,14 +38,28 @@ export const CreateTaskForm = ({
       projectId: currentProject!,
       title: "",
       description: "",
-      createdDate: new Date().toISOString().split("T")[0],
-      timeInProgress: "",
+      createdDate: dateNow(),
+      timeInProgress: "0",
       endDate: "",
       priority: "high",
       files: [],
       currentStatus: "queue",
       subTasks: [],
     },
+  )
+
+  const [files, setFiles] = useState<any[]>(
+    task
+      ? task?.files.map((file): FilePondInitialFile => {
+          return {
+            source: file.id,
+            options: {
+              type: "local",
+              file: { name: file.name, size: file.size, type: file.type },
+            },
+          }
+        })
+      : [],
   )
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -77,19 +96,27 @@ export const CreateTaskForm = ({
     handleOpenModal()
   }
 
-  const handleEditTask = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(editTask(myTask))
-    onCloseModal()
-  }
-
-  const handleAddTask = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    dispatch(addTask(myTask))
-    if (onAddSubTask) {
-      onAddSubTask(myTask.id)
+    if (mode === "edit") {
+      myTask.files = files.map(file => {
+        return {
+          id: file.serverId,
+          name: file.file.name,
+          size: file.file.size,
+          type: file.file.type,
+        }
+      })
+      dispatch(editTask(myTask))
+      onCloseModal()
     }
-    onCloseModal()
+    if (mode === "create") {
+      dispatch(addTask(myTask))
+      if (onAddSubTask) {
+        onAddSubTask(myTask.id)
+      }
+      onCloseModal()
+    }
   }
 
   const addSubTask = (id: number) => {
@@ -101,18 +128,19 @@ export const CreateTaskForm = ({
   return (
     <>
       <div className={cls.formContainer}>
-        {mode === "edit" && <span>Редактирование задачи</span>}
-        {mode === "create" && <span>Создание задачи</span>}
+        {mode === "edit" && <h3>Редактирование задачи</h3>}
+        {mode === "create" && <h3>Создание задачи</h3>}
 
-        {mode === "edit" && <span>#{myTask?.id}</span>}
+        {mode === "edit" && <h4>#{myTask?.id}</h4>}
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <label>
             <p>Заголовок</p>
             <input
               type="text"
               name="title"
               required={true}
+              min={1}
               value={myTask?.title}
               onChange={handleChangeTask}
             />
@@ -126,9 +154,9 @@ export const CreateTaskForm = ({
             />
           </label>
           <label>
-            <p>Время в работе</p>
+            <p>Время в работе, в часах</p>
             <input
-              type="text"
+              type="number"
               name="timeInProgress"
               value={myTask?.timeInProgress}
               onChange={handleChangeTask}
@@ -157,11 +185,42 @@ export const CreateTaskForm = ({
           </label>
           <label>
             <p>Вложенные файлы</p>
-            <input
-              type="text"
-              name="files"
-              value="сюда надо файлы"
-              onChange={handleChangeTask}
+            <FilePond
+              server={{
+                process: (
+                  fieldName,
+                  file,
+                  metadata,
+                  load,
+                  error,
+                  progress,
+                  abort,
+                  transfer,
+                  options,
+                ) => {
+                  progress(false, 0, 0)
+                  saveFile(file)
+                    .then(result => {
+                      if (result) {
+                        load(result)
+                      }
+                    })
+                    .catch(() => {
+                      error("file exists")
+                    })
+
+                  return {
+                    abort: () => {
+                      abort()
+                    },
+                  }
+                },
+              }}
+              files={files}
+              allowReorder={true}
+              allowMultiple={true}
+              onupdatefiles={setFiles}
+              labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
             />
           </label>
           <label>
@@ -178,21 +237,22 @@ export const CreateTaskForm = ({
           </label>
 
           {mode === "edit" && (
-            <div>
-              <p>Подзадачи</p>
+            <div className={cls.subTasks}>
+              <div>
+                <p className={cls.title}>Подзадачи</p>
+                <button
+                  className={cls.addSubTaskBtn}
+                  onClick={handleAddSubTask}
+                >
+                  Добавить подзадачу
+                </button>
+              </div>
               <SubTasks subTasks={subTasks || []} />
-              <button className={cls.addSubTaskBtn} onClick={handleAddSubTask}>
-                Добавить подзадачу
-              </button>
             </div>
           )}
-
-          {mode === "edit" && (
-            <button onClick={handleEditTask}>Сохранить</button>
-          )}
-          {mode === "create" && (
-            <button onClick={handleAddTask}>Добавить задачу</button>
-          )}
+          <button className={cls.saveButton} type="submit">
+            {mode === "edit" ? "Сохранить" : "Добавить задачу"}
+          </button>
         </form>
       </div>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>

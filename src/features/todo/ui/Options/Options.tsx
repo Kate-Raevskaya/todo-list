@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { NavLink } from "react-router"
 
-import { getAllTasks } from "../../../../app/selectors.ts"
+import { getProjectById } from "../../../../app/selectors.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import { useAppSelector } from "../../../../shared/hooks/store-hooks.ts"
 import { useDebounce } from "../../../../shared/hooks/useDebounce.ts"
@@ -10,12 +10,14 @@ import cls from "./Options.module.sass"
 
 type Props = {
   onFilterChanged: (value: string) => void
+  projectId: number
 }
 
-export const Options = ({ onFilterChanged }: Props) => {
+export const Options = ({ onFilterChanged, projectId }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>("")
   const debouncedValue = useDebounce(inputValue, 300)
+  const project = useAppSelector(state => getProjectById(state, projectId))
 
   const handleOpenModal = () => setIsModalOpen(true)
   const handleCloseModal = () => {
@@ -35,14 +37,21 @@ export const Options = ({ onFilterChanged }: Props) => {
   return (
     <>
       <div className={cls.container}>
-        <NavLink to={"/"}>Back to all projects</NavLink>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Type title or task number..."
-        />
-        <button onClick={handleOpenModal}>Create new task</button>
+        <div className={cls.title}>
+          <h3>{project?.name}</h3>
+          <NavLink className={cls.backToProjects} to={"/"}>
+            К списку проектов
+          </NavLink>
+        </div>
+        <div className={cls.innerContainer}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Введите номер или название задачи..."
+          />
+          <div className={cls.createButton} onClick={handleOpenModal}></div>
+        </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <CreateTaskForm

@@ -5,6 +5,7 @@ import { setCurrent } from "../../../../app/projectsSlice.ts"
 import { useAppDispatch } from "../../../../shared/hooks/store-hooks.ts"
 import { Options } from "../Options/Options.tsx"
 import { TodoTable } from "../TodoTable/TodoTable.tsx"
+import cls from "./TodoPage.module.sass"
 
 const TodoPage = () => {
   const { projectId = "" } = useParams()
@@ -17,8 +18,8 @@ const TodoPage = () => {
   }, [])
 
   return (
-    <div>
-      <Options onFilterChanged={setFilter} />
+    <div className={cls.container}>
+      <Options projectId={id} onFilterChanged={setFilter} />
       <TodoTable projectId={id} filter={filter} />
     </div>
   )

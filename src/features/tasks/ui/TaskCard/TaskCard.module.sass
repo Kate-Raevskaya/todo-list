@@ -1,25 +1,45 @@
+@use 'src/shared/ui/variables' as variables
+
 .taskCard
-  border: 1px solid #ddd
-  padding: 0 10px
+  border: 1px solid variables.$dark-beige
+  padding: 5px 10px
   background-color: #f9f9f9
-  border-radius: 8px
+  border-radius: 15px
   font-size: 15px
   width: 100%
   height: fit-content
   cursor: grab
   box-sizing: border-box
+  color: variables.$light-brown
+  word-wrap: break-word
+  hyphens: auto
+  overflow-wrap: break-word
+
+  touch-action: manipulation
 
   &:active
     cursor: pointer
-
   &:hover
     background-color: rgb(234, 234, 234)
+
+  p
+    margin: 3px
+    .low
+      color: variables.$dark-beige
+    .medium
+      color: cornflowerblue
+    .high
+      color: red
+
+  h3
+    margin: 0
+    font-size: 18px
+    text-decoration: underline
 
   &.queue
     border-left: 5px solid #ffcc00
     &:hover
       border-left: 5px solid #ffcc00
-
     &.draggingTask
       color: #f9f9f9
       border: 3px solid #ffcc00
@@ -39,7 +59,3 @@
     &.draggingTask
       color: #f9f9f9
       border: 3px solid #007bff
-
-  h4
-    margin: 5px
-    text-decoration: underline

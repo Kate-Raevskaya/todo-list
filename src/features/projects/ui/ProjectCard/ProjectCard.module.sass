@@ -1,4 +1,19 @@
-.container
-  width: fit-content
-  height: 30px
-  border: 1px solid black
+@use 'src/shared/ui/variables' as variables
+
+.projectLink
+  display: block
+  max-width: 70vw
+  padding: 5px 20px
+  font-size: 20px
+  text-align: center
+  color: variables.$dark-green
+  text-decoration: none
+  border-radius: 20px
+  border: 1px solid variables.$dark-green
+  word-wrap: break-word
+  hyphens: auto
+  overflow-wrap: break-word
+
+
+  &:hover
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3)

@@ -4,7 +4,8 @@ import {
   type DragOverEvent,
   DragOverlay,
   type DragStartEvent,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   pointerWithin,
   useSensor,
   useSensors,
@@ -12,9 +13,8 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable"
 import { useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { shallowEqual } from "react-redux"
 
-import { getFilteredTasks } from "../../../../app/selectors.ts"
+import { getAllTasks } from "../../../../app/selectors.ts"
 import { moveTask } from "../../../../app/tasksSlice.ts"
 import {
   useAppDispatch,
@@ -33,9 +33,11 @@ type Props = {
 }
 
 export const TodoTable = ({ projectId, filter }: Props) => {
-  const tasks = useAppSelector(
-    state => getFilteredTasks(state, filter),
-    shallowEqual,
+  const allTasks = useAppSelector(state => getAllTasks(state))
+  const tasks = allTasks.filter(
+    task =>
+      task.id.toString().toLowerCase().startsWith(filter) ||
+      task.title.toLowerCase().startsWith(filter),
   )
   const dispatch = useAppDispatch()
   const timeout = useRef<NodeJS.Timeout>()
@@ -47,9 +49,12 @@ export const TodoTable = ({ projectId, filter }: Props) => {
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 250, tolerance: 5 },
+    }),
+    useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 10, //3px
+        distance: 10, //10px
       },
     }),
   )

@@ -58,8 +58,8 @@ export const TaskCard = ({ task }: Props) => {
         style={style}
         className={`${cls.taskCard} ${cls[task.currentStatus]} ${cls.draggingTask}`}
       >
-        <span>#{task.id}</span>
-        <h4>{task.title}</h4>
+        <p>#{task.id}</p>
+        <h3>{task.title}</h3>
         <p>
           <b>Время в процессе:</b> {task.timeInProgress}
         </p>
@@ -80,13 +80,15 @@ export const TaskCard = ({ task }: Props) => {
         className={`${cls.taskCard} ${cls[task.currentStatus]}`}
         onClick={handleOpenModal}
       >
-        <span>#{task.id}</span>
-        <h4>{task.title}</h4>
+        <p>#{task.id}</p>
+        <h3>{task.title}</h3>
         <p>
-          <b>Время в процессе:</b> {task.timeInProgress}
+          <b>Время в процессе: </b>
+          {task.timeInProgress}
         </p>
         <p>
-          <b>Приоритет:</b> {task.priority}
+          <b>Приоритет: </b>
+          <span className={cls[task.priority]}>{task.priority}</span>
         </p>
       </div>
 

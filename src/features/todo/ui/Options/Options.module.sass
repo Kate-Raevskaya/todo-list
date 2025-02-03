@@ -1,4 +1,77 @@
+@use 'src/shared/ui/variables' as variables
+
 .container
-  font-size: 18px
+  width: 100%
   display: flex
+  justify-content: space-between
+  font-size: 18px
   gap: 20px
+
+  @media (max-width: 600px)
+    box-sizing: border-box
+    padding: 10px 20px
+    flex-direction: column
+
+  .title
+    display: flex
+    align-items: baseline
+    gap: 20px
+
+    h3
+      font-size: 25px
+      margin: 0
+      max-width: 300px
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+
+  .backToProjects
+    text-decoration: none
+    color: variables.$dark-green
+
+    &:hover
+      text-decoration: underline
+
+  .innerContainer
+    display: flex
+    gap: 20px
+
+    input
+      font-size: 18px
+      border-radius: 20px
+      width: 350px
+      border: 1px solid variables.$dark-brown
+      padding: 5px 10px
+      color: variables.$dark-brown
+
+      @media (max-width: 600px)
+        font-size: 15px
+        flex-shrink: 1
+        flex-grow: 1
+
+    .createButton
+      font-size: 18px
+      border-radius: 20px
+      background-color: variables.$dark-green
+      padding: 5px 10px
+      color: white
+      @media (max-width: 600px)
+        width: 30px
+        border-radius: 30px
+        flex-shrink: 0
+        flex-grow: 0
+
+      &::after
+        content: 'Добавить задачу'
+        @media (max-width: 600px)
+          display: block
+          text-align: center
+          line-height: 40px
+          position: relative
+          top: -4px
+          content: '+'
+          font-size: 40px
+
+      &:hover
+        cursor: pointer
+        background-color: #3a504d

@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "strict": true,
     "allowImportingTsExtensions": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "module": "esnext",
     "moduleResolution": "bundler",

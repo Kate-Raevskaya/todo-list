@@ -28,10 +28,9 @@ export const ColumnContainer = ({ column, tasks }: ColumnContainerProps) => {
     },
   })
 
-  // const tasksIds = useMemo(() => {
-  //   return tasks.map(task => task.id)
-  // }, [tasks])
-  const tasksIds = tasks.map(task => task.id)
+  const tasksIds = useMemo(() => {
+    return tasks.map(task => task.id)
+  }, [tasks])
 
   const style = {
     transition,

@@ -20,9 +20,10 @@ export type Task = {
 }
 
 export type TaskFile = {
-  id: number
+  id: string
   name: string
-  url: string
+  size: number
+  type: string
 }
 
 export type Comment = {

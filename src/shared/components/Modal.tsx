@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
 import cls from "./Modal.module.sass"
@@ -10,7 +10,20 @@ type Props = {
 }
 
 export const Modal = ({ isOpen, onClose, children }: Props) => {
-  if (!isOpen) {
+  const [isVisible, setIsVisible] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true)
+      setTimeout(() => setIsAnimating(true), 10) // Даем время для применения CSS-классов
+    } else {
+      setIsAnimating(false)
+      setTimeout(() => setIsVisible(false), 300) // Удаляем из DOM после анимации
+    }
+  }, [isOpen])
+
+  if (!isVisible) {
     return null
   }
 
@@ -23,10 +36,13 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
   return (
     <>
       {createPortal(
-        <div className={cls.modalOverlay} onClick={handleOverlayClick}>
+        <div
+          className={`${cls.modalOverlay} ${cls[isAnimating ? "open" : "close"]}`}
+          onClick={handleOverlayClick}
+        >
           <div className={cls.modalContent}>
             <button className={cls.closeButton} onClick={onClose}>
-              X
+              &#xD7;
             </button>
             {children}
           </div>

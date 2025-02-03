@@ -1,5 +1,5 @@
 import { getNextId } from "../hepers/getMaxId.ts"
-import type { Comment, Task } from "../model/projects.types.ts"
+import type { Comment } from "../model/projects.types.ts"
 
 export const addComment = (comment: Comment): number => {
   const commentsData = localStorage.getItem("comments")

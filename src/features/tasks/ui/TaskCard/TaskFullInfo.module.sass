@@ -1,0 +1,39 @@
+@use 'src/shared/ui/variables' as variables
+
+.container
+  display: flex
+  flex-direction: column
+  gap: 10px
+  color: variables.$dark-brown
+  word-wrap: break-word
+  hyphens: auto
+  overflow-wrap: break-word
+
+  h4
+    font-size: 20px
+    margin: 10px 0
+    text-decoration: underline
+
+  .low
+    color: variables.$dark-beige
+  .medium
+    color: cornflowerblue
+  .high
+    color: red
+
+  .options
+    button
+      margin-right: 10px
+      font-size: 15px
+      border-radius: 20px
+
+      border: none
+      padding: 5px 10px
+      color: white
+      &.editButton
+        background-color: variables.$dark-green
+      &.deleteButton
+        background-color: variables.$dark-brown
+      &:hover
+        cursor: pointer
+        box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3)

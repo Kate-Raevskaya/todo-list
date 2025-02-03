@@ -8,8 +8,8 @@ type Props = {
 }
 export const ProjectCard = ({ project }: Props) => {
   return (
-    <NavLink to={`todo/${project.id}`}>
-      <div className={cls.container}>{project.name}</div>
+    <NavLink className={cls.projectLink} to={`todo/${project.id}`}>
+      {project.name}
     </NavLink>
   )
 }

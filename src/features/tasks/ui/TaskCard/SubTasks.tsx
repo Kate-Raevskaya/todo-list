@@ -1,4 +1,5 @@
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import cls from "./SubTasks.module.sass"
 
 type Props = {
   subTasks: Task[]
@@ -9,11 +10,13 @@ export const SubTasks = ({ subTasks }: Props) => {
     <ul>
       {subTasks.map(subTask => (
         <li key={subTask.id}>
-          #{subTask.id} {subTask.title}
+          <p className={cls.subTask}>
+            #{subTask.id} <b>{subTask.title}</b>
+          </p>
         </li>
       ))}
     </ul>
   ) : (
-    <p>Нет подзадач</p>
+    <p className={cls.noSubTask}>Нет подзадач</p>
   )
 }

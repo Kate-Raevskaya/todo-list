@@ -1,6 +1,7 @@
 import { getAllTasks } from "../../../../app/selectors.ts"
 import { deleteTask } from "../../../../app/tasksSlice.ts"
 import { Comments } from "../../../../shared/components/Comments.tsx"
+import { Files } from "../../../../shared/components/Files.tsx"
 import {
   useAppDispatch,
   useAppSelector,
@@ -35,55 +36,48 @@ export const TaskFullInfo = ({ task, onCloseModal, onChangeIsEdit }: Props) => {
 
   return (
     <div className={cls.container}>
-      <span># {task.id}</span>
+      <div className={cls.taskId}>#{task.id}</div>
       <h4>{task.title}</h4>
       <div className={cls.options}>
-        <button onClick={onEdit}>edit</button>
-        <button onClick={onDelete}>delete task</button>
+        <button className={cls.editButton} onClick={onEdit}>
+          Редактировать
+        </button>
+        <button className={cls.deleteButton} onClick={onDelete}>
+          Удалить задачу
+        </button>
       </div>
-      <p>
+      <div>
         <b>Описание:</b> {task.description}
-      </p>
-      <p>
-        <b>Создана:</b> {task.createdDate}
-      </p>
-      <p>
-        <b>Время в процессе:</b> {task.timeInProgress}
-      </p>
-      <p>
-        <b>Дата окончания:</b> {task.endDate}
-      </p>
-      <p>
-        <b>Приоритет:</b> {task.priority}
-      </p>
-      <p>
-        <b>Статус:</b> {task.currentStatus}
-      </p>
-
+      </div>
       <div>
-        <h4>Вложенные файлы:</h4>
-        {task.files.length > 0 ? (
-          <ul>
-            {task.files.map(file => (
-              <li key={file.id}>
-                <a href={file.url} target="_blank" rel="noopener noreferrer">
-                  {file.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Нет вложенных файлов</p>
-        )}
+        <b>Создана:</b> {task.createdDate}
+      </div>
+      <div>
+        <b>Время в процессе:</b> {task.timeInProgress}ч
+      </div>
+      <div>
+        <b>Дата окончания:</b> {task.endDate}
+      </div>
+      <div>
+        <b>Приоритет:</b>{" "}
+        <span className={cls[task.priority]}>{task.priority}</span>
+      </div>
+      <div>
+        <b>Статус:</b> {task.currentStatus}
       </div>
 
       <div>
-        <h4>Подзадачи:</h4>
+        <b>Вложенные файлы:</b>
+        <Files files={task.files} />
+      </div>
+
+      <div>
+        <b>Подзадачи:</b>
         <SubTasks subTasks={subTasks} />
       </div>
 
       <div>
-        <h4>Комментарии:</h4>
+        <b>Комментарии:</b>
         <Comments taskId={task.id} parentId={null} />
       </div>
     </div>
