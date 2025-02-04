@@ -128,7 +128,7 @@ export const CreateTaskForm = ({
     if (mode === "create") {
       dispatch(addTask(newTask))
       if (onAddSubTask) {
-        onAddSubTask(myTask.id)
+        onAddSubTask(newTask.id)
       }
       onCloseModal()
     }
