@@ -7,7 +7,7 @@
   font-size: 18px
   gap: 20px
 
-  @media (max-width: 600px)
+  @media (max-width: 900px)
     box-sizing: border-box
     padding: 10px 20px
     flex-direction: column
@@ -34,28 +34,54 @@
 
   .innerContainer
     display: flex
+    align-items: center
     gap: 20px
 
-    input
-      font-size: 18px
-      border-radius: 20px
-      width: 350px
-      border: 1px solid variables.$dark-brown
-      padding: 5px 10px
-      color: variables.$dark-brown
+    .inputWrapper
+      position: relative
+      display: flex
+      align-items: center
+      width: 400px
 
-      @media (max-width: 600px)
+      @media (max-width: 900px)
         font-size: 15px
         flex-shrink: 1
         flex-grow: 1
+
+      .searchLabel
+        position: absolute
+        left: 5px
+        cursor: pointer
+        display: flex
+        align-items: center
+        justify-content: center
+        padding: 5px
+
+      .searchIcon
+        width: 22px
+        height: 22px
+
+      input
+        font-size: 16px
+        border-radius: 20px
+        border: 1px solid variables.$dark-brown
+        padding: 10px 10px 10px 35px
+        width: 100%
+        color: variables.$dark-brown
+        @media (max-width: 600px)
+          padding: 10px 10px 10px 35px
+
 
     .createButton
       font-size: 18px
       border-radius: 20px
       background-color: variables.$dark-green
-      padding: 5px 10px
+      padding: 5px 15px
       color: white
+      text-align: center
+
       @media (max-width: 600px)
+        padding: 5px 10px
         width: 30px
         border-radius: 30px
         flex-shrink: 0
@@ -68,7 +94,7 @@
           text-align: center
           line-height: 40px
           position: relative
-          top: -4px
+          top: -3px
           content: '+'
           font-size: 40px
 

@@ -3,8 +3,7 @@ import "filepond/dist/filepond.min.css"
 import { useState } from "react"
 import { FilePond } from "react-filepond"
 
-import { getAllTasks, getCurrentProject } from "../../../../app/selectors.ts"
-import { addTask, editTask } from "../../../../app/tasksSlice.ts"
+import { AddButton } from "../../../../shared/components/AddButton.tsx"
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import { dateNow } from "../../../../shared/hepers/date-transform.ts"
 import { saveFile } from "../../../../shared/hepers/files.ts"
@@ -13,6 +12,8 @@ import {
   useAppSelector,
 } from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import { getAllTasks, getCurrentProject } from "../../../../store/selectors.ts"
+import { addTask, editTask } from "../../../../store/tasksSlice.ts"
 import { SubTasks } from "../TaskCard/SubTasks.tsx"
 import cls from "./CreateTaskForm.module.sass"
 
@@ -21,6 +22,7 @@ type Props = {
   mode: "edit" | "create"
   onCloseModal: () => void
   onAddSubTask?: (id: number) => void
+  onSetInputValue?: () => void
 }
 
 export const CreateTaskForm = ({
@@ -28,6 +30,7 @@ export const CreateTaskForm = ({
   onCloseModal,
   mode,
   onAddSubTask,
+  onSetInputValue,
 }: Props) => {
   const allTasks = useAppSelector(getAllTasks)
   const currentProject = useAppSelector(getCurrentProject)
@@ -98,20 +101,40 @@ export const CreateTaskForm = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (onSetInputValue) {
+      onSetInputValue()
+    }
+
     if (mode === "edit") {
-      myTask.files = files.map(file => {
-        return {
-          id: file.serverId,
-          name: file.file.name,
-          size: file.file.size,
-          type: file.file.type,
-        }
-      })
-      dispatch(editTask(myTask))
+      dispatch(
+        editTask({
+          ...myTask,
+          files: files.map(file => {
+            return {
+              id: file.serverId,
+              name: file.file.name,
+              size: file.file.size,
+              type: file.file.type,
+            }
+          }),
+        }),
+      )
       onCloseModal()
     }
     if (mode === "create") {
-      dispatch(addTask(myTask))
+      dispatch(
+        addTask({
+          ...myTask,
+          files: files.map(file => {
+            return {
+              id: file.serverId,
+              name: file.file.name,
+              size: file.file.size,
+              type: file.file.type,
+            }
+          }),
+        }),
+      )
       if (onAddSubTask) {
         onAddSubTask(myTask.id)
       }
@@ -158,6 +181,7 @@ export const CreateTaskForm = ({
             <input
               type="number"
               name="timeInProgress"
+              min={0}
               value={myTask?.timeInProgress}
               onChange={handleChangeTask}
             />
@@ -238,21 +262,16 @@ export const CreateTaskForm = ({
 
           {mode === "edit" && (
             <div className={cls.subTasks}>
-              <div>
-                <p className={cls.title}>Подзадачи</p>
-                <button
-                  className={cls.addSubTaskBtn}
-                  onClick={handleAddSubTask}
-                >
-                  Добавить подзадачу
-                </button>
-              </div>
+              <p className={cls.title}>Подзадачи</p>
               <SubTasks subTasks={subTasks || []} />
+              <button className={cls.addSubTaskBtn} onClick={handleAddSubTask}>
+                Добавить подзадачу
+              </button>
             </div>
           )}
-          <button className={cls.saveButton} type="submit">
-            {mode === "edit" ? "Сохранить" : "Добавить задачу"}
-          </button>
+          <AddButton
+            title={mode === "edit" ? "Сохранить" : "Добавить задачу"}
+          />
         </form>
       </div>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>

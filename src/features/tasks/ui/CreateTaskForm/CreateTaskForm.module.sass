@@ -1,7 +1,7 @@
 @use 'src/shared/ui/variables' as variables
 
 .formContainer
-  font-size: 18px
+  font-size: 16px
   color: variables.$dark-brown
   h3
     margin-bottom: 0
@@ -15,16 +15,52 @@
     display: flex
     flex-direction: column
 
+    input, textarea, select
+      width: 100%
+      padding: 10px
+      border: 1px solid #ccc
+      border-radius: 6px
+      font-size: 14px
+      transition: 0.3s
+      box-sizing: border-box
+      &:focus
+        border-color: variables.$dark-green
+        box-shadow: 0 0 5px variables.$light-green
+        outline: none
+
+    textarea
+      resize: vertical
+      min-height: 80px
+
+    select
+      width: 100%
+      background: white
+      cursor: pointer
+
+
     label
       font-weight: bold
       p
-        margin: 5px
+        margin: 5px 0
 
     .subTasks
       display: flex
+      flex-direction: column
       .title
         font-weight: bold
-        margin: 3px 0
+        margin: 5px 0
+      .addSubTaskBtn
+        width: fit-content
+        font-size: 15px
+        border-radius: 20px
+        border: none
+        padding: 5px 10px
+        color: white
+        background-color: variables.$dark-brown
+        &:hover
+          cursor: pointer
+          box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3)
+
   .saveButton
     align-self: center
 

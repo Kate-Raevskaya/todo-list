@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react"
 import { NavLink } from "react-router"
 
-import { getProjectById } from "../../../../app/selectors.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
-import { useAppSelector } from "../../../../shared/hooks/store-hooks.ts"
 import { useDebounce } from "../../../../shared/hooks/useDebounce.ts"
+import search from "../../../../shared/images/search-icon.svg"
+import type { Project } from "../../../../shared/model/projects.types.ts"
 import { CreateTaskForm } from "../../../tasks/ui/CreateTaskForm/CreateTaskForm.tsx"
 import cls from "./Options.module.sass"
 
 type Props = {
   onFilterChanged: (value: string) => void
-  projectId: number
+  project: Project
 }
 
-export const Options = ({ onFilterChanged, projectId }: Props) => {
+export const Options = ({ onFilterChanged, project }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>("")
   const debouncedValue = useDebounce(inputValue, 300)
-  const project = useAppSelector(state => getProjectById(state, projectId))
 
   const handleOpenModal = () => setIsModalOpen(true)
   const handleCloseModal = () => {
     setIsModalOpen(false)
     return
+  }
+
+  const handleSetInputValue = () => {
+    setInputValue("")
   }
 
   useEffect(() => {
@@ -44,12 +47,18 @@ export const Options = ({ onFilterChanged, projectId }: Props) => {
           </NavLink>
         </div>
         <div className={cls.innerContainer}>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Введите номер или название задачи..."
-          />
+          <div className={cls.inputWrapper}>
+            <label htmlFor="search-input" className={cls.searchLabel}>
+              <img src={search} className={cls.searchIcon} alt="search" />
+            </label>
+            <input
+              id="search-input"
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="Искать по номеру или названию задачи..."
+            />
+          </div>
           <div className={cls.createButton} onClick={handleOpenModal}></div>
         </div>
       </div>
@@ -57,6 +66,7 @@ export const Options = ({ onFilterChanged, projectId }: Props) => {
         <CreateTaskForm
           task={null}
           onCloseModal={handleCloseModal}
+          onSetInputValue={handleSetInputValue}
           mode="create"
         />
       </Modal>

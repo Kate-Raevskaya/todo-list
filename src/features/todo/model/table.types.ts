@@ -1,6 +1,6 @@
-export type Id = "queue" | "done" | "development"
+import type { Status as ColumnId } from "../../../shared/model/projects.types.ts"
 
 export type Column = {
-  id: Id
+  id: ColumnId
   title: string
 }

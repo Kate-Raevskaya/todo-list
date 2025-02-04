@@ -9,3 +9,13 @@ export function dateNow(): string {
     },
   )}`
 }
+
+export const transformDate = (myDate: string) => {
+  const date = new Date(myDate)
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }
+  return date.toLocaleDateString("en-US", options)
+}

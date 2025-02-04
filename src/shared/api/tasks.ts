@@ -1,4 +1,4 @@
-import { getNextId } from "../hepers/getMaxId.ts"
+import { getNextId } from "../hepers/get-next-id.ts"
 import type { Status, Task } from "../model/projects.types.ts"
 
 export const getProjectTasks = (projectId: number): Task[] => {

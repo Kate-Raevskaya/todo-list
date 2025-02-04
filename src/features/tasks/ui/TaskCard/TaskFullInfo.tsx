@@ -1,12 +1,13 @@
-import { getAllTasks } from "../../../../app/selectors.ts"
-import { deleteTask } from "../../../../app/tasksSlice.ts"
 import { Comments } from "../../../../shared/components/Comments.tsx"
 import { Files } from "../../../../shared/components/Files.tsx"
+import { transformDate } from "../../../../shared/hepers/date-transform.ts"
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import { getAllTasks } from "../../../../store/selectors.ts"
+import { deleteTask } from "../../../../store/tasksSlice.ts"
 import { SubTasks } from "./SubTasks.tsx"
 import cls from "./TaskFullInfo.module.sass"
 
@@ -53,11 +54,13 @@ export const TaskFullInfo = ({ task, onCloseModal, onChangeIsEdit }: Props) => {
         <b>Создана:</b> {task.createdDate}
       </div>
       <div>
-        <b>Время в процессе:</b> {task.timeInProgress}ч
+        <b>Время в работе:</b> {task.timeInProgress}ч
       </div>
-      <div>
-        <b>Дата окончания:</b> {task.endDate}
-      </div>
+      {task.endDate && (
+        <div>
+          <b>Дата окончания:</b> {transformDate(task.endDate)}
+        </div>
+      )}
       <div>
         <b>Приоритет:</b>{" "}
         <span className={cls[task.priority]}>{task.priority}</span>

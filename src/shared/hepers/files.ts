@@ -109,7 +109,7 @@ export const getFile = async (filename: string) => {
       reject()
     }
     request.onsuccess = (event: Event) => {
-      const file = new File([request.result.data], request.result.fileName, {
+      const file = new File([request.result.data], request.result.name, {
         type: request.result.type,
       })
       resolve(file)

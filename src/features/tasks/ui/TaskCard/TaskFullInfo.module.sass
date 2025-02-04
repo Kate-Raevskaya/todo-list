@@ -11,7 +11,7 @@
 
   h4
     font-size: 20px
-    margin: 10px 0
+    margin: 10px 0 5px 0
     text-decoration: underline
 
   .low
@@ -26,7 +26,6 @@
       margin-right: 10px
       font-size: 15px
       border-radius: 20px
-
       border: none
       padding: 5px 10px
       color: white
@@ -34,6 +33,8 @@
         background-color: variables.$dark-green
       &.deleteButton
         background-color: variables.$dark-brown
+        @media(max-width: 600px)
+          margin-top: 5px
       &:hover
         cursor: pointer
         box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3)

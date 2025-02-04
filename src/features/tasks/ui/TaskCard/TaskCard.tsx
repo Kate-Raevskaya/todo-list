@@ -2,11 +2,11 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useState } from "react"
 
-import { initializeComments } from "../../../../app/commentsSlice.ts"
 import { getCommentForTask } from "../../../../shared/api/comments.ts"
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import { useAppDispatch } from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import { initializeComments } from "../../../../store/commentsSlice.ts"
 import { CreateTaskForm } from "../CreateTaskForm/CreateTaskForm.tsx"
 import cls from "./TaskCard.module.sass"
 import { TaskFullInfo } from "./TaskFullInfo.tsx"
@@ -94,11 +94,19 @@ export const TaskCard = ({ task }: Props) => {
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         {isEditMode ? (
-          <CreateTaskForm
-            task={task}
-            onCloseModal={handleCloseModal}
-            mode="edit"
-          />
+          <>
+            <div
+              className={cls.goBackButton}
+              onClick={() => setIsEditMode(false)}
+            >
+              Назад
+            </div>
+            <CreateTaskForm
+              task={task}
+              onCloseModal={handleCloseModal}
+              mode="edit"
+            />
+          </>
         ) : (
           <TaskFullInfo
             task={task}

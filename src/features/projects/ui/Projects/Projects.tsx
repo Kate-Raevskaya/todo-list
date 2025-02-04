@@ -1,15 +1,15 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
-import { addProject } from "../../../../app/projectsSlice.ts"
-import { getAllProjects } from "../../../../app/selectors.ts"
+import { AddButton } from "../../../../shared/components/AddButton.tsx"
 import { Modal } from "../../../../shared/components/Modal.tsx"
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../shared/hooks/store-hooks.ts"
-import okay from "../../../../shared/images/okay.svg"
 import projectImage from "../../../../shared/images/project.png"
 import type { Project } from "../../../../shared/model/projects.types.ts"
+import { addProject } from "../../../../store/projectsSlice.ts"
+import { getAllProjects } from "../../../../store/selectors.ts"
 import { ProjectCard } from "../ProjectCard/ProjectCard.tsx"
 import cls from "./Projects.module.sass"
 
@@ -18,15 +18,25 @@ const Projects = () => {
   const dispatch = useAppDispatch()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [projectTitle, setProjectTitle] = useState<string>("")
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
+    }
+  }, [isModalOpen])
 
   const handleClick = () => {
     handleOpenModal()
   }
 
   const handleOpenModal = () => setIsModalOpen(true)
+
   const handleCloseModal = () => {
     setIsModalOpen(false)
-    return
+    setProjectTitle("")
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +55,7 @@ const Projects = () => {
   }
 
   return (
-    <>
+    <div className={cls.mainContainer}>
       <div className={cls.top}>
         <h1>Мои проекты</h1>
         <div className={cls.container}>
@@ -77,18 +87,16 @@ const Projects = () => {
             <input
               type="text"
               name="title"
+              ref={inputRef}
               required={true}
               value={projectTitle}
               onChange={handleInputChange}
             />
-            <button className={cls.addButton} type="submit">
-              Добавить проект
-              <img src={okay} className={cls.okay} alt="okay" />
-            </button>
+            <AddButton title="Добавить проект" />
           </form>
         </div>
       </Modal>
-    </>
+    </div>
   )
 }
 

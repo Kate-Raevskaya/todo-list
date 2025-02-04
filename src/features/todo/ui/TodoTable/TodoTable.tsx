@@ -14,13 +14,13 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable"
 import { useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
-import { getAllTasks } from "../../../../app/selectors.ts"
-import { moveTask } from "../../../../app/tasksSlice.ts"
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../shared/hooks/store-hooks.ts"
 import type { Task } from "../../../../shared/model/projects.types.ts"
+import { getAllTasks } from "../../../../store/selectors.ts"
+import { moveTask } from "../../../../store/tasksSlice.ts"
 import { TaskCard } from "../../../tasks/ui/TaskCard/TaskCard.tsx"
 import { getAllColumns } from "../../model/api.ts"
 import type { Column } from "../../model/table.types.ts"
@@ -28,11 +28,10 @@ import { ColumnContainer } from "./ColumnContainer.tsx"
 import cls from "./TodoTable.module.sass"
 
 type Props = {
-  projectId: number
   filter: string
 }
 
-export const TodoTable = ({ projectId, filter }: Props) => {
+export const TodoTable = ({ filter }: Props) => {
   const allTasks = useAppSelector(state => getAllTasks(state))
   const tasks = allTasks.filter(
     task =>
@@ -157,11 +156,7 @@ export const TodoTable = ({ projectId, filter }: Props) => {
           {columns.map(col => {
             return (
               <ColumnContainer
-                tasks={tasks.filter(
-                  task =>
-                    task.currentStatus.toLowerCase() ===
-                    col.title.toLowerCase(),
-                )}
+                tasks={tasks.filter(task => task.currentStatus === col.id)}
                 column={col}
                 key={col.id}
               />
@@ -174,9 +169,7 @@ export const TodoTable = ({ projectId, filter }: Props) => {
             {activeColumn && (
               <ColumnContainer
                 tasks={tasks.filter(
-                  task =>
-                    task.currentStatus.toLowerCase() ===
-                    activeColumn.title.toLowerCase(),
+                  task => task.currentStatus === activeColumn.id,
                 )}
                 column={activeColumn}
               />

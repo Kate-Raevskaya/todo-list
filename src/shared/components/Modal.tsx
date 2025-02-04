@@ -16,10 +16,10 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true)
-      setTimeout(() => setIsAnimating(true), 10) // Даем время для применения CSS-классов
+      setTimeout(() => setIsAnimating(true), 30)
     } else {
       setIsAnimating(false)
-      setTimeout(() => setIsVisible(false), 300) // Удаляем из DOM после анимации
+      setTimeout(() => setIsVisible(false), 300)
     }
   }, [isOpen])
 
@@ -27,18 +27,11 @@ export const Modal = ({ isOpen, onClose, children }: Props) => {
     return null
   }
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
   return (
     <>
       {createPortal(
         <div
           className={`${cls.modalOverlay} ${cls[isAnimating ? "open" : "close"]}`}
-          onClick={handleOverlayClick}
         >
           <div className={cls.modalContent}>
             <button className={cls.closeButton} onClick={onClose}>

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { shallowEqual } from "react-redux"
 
-import { addComment } from "../../app/commentsSlice.ts"
-import { getAllComments } from "../../app/selectors.ts"
+import { addComment } from "../../store/commentsSlice.ts"
+import { getAllComments } from "../../store/selectors.ts"
 import { dateNow } from "../hepers/date-transform.ts"
 import { useAppDispatch, useAppSelector } from "../hooks/store-hooks.ts"
 import cls from "./Comments.module.sass"

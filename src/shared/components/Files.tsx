@@ -1,5 +1,6 @@
-import { downloadFile, getFile } from "../hepers/files.ts"
 import type { TaskFile } from "../model/projects.types.ts"
+import { FileCard } from "./FileCard.tsx"
+import cls from "./Files.module.sass"
 
 type Props = {
   files: TaskFile[]
@@ -7,28 +8,11 @@ type Props = {
 
 export const Files = ({ files }: Props) => {
   return (
-    <div>
+    <div className={cls.container}>
       {files.length > 0 ? (
-        <ul>
-          {files.map(file => (
-            <li key={file.id}>
-              <p>
-                {file.name} {(file.size / 1024).toFixed(1)}Кб
-              </p>
-              <button
-                onClick={() => {
-                  getFile(file.name)
-                    .then(file => downloadFile(file!))
-                    .catch()
-                }}
-              >
-                Click me
-              </button>
-            </li>
-          ))}
-        </ul>
+        files.map(file => <FileCard file={file} key={file.id} />)
       ) : (
-        <p>Нет вложенных файлов</p>
+        <p className={cls.emptyFiles}>Нет вложенных файлов</p>
       )}
     </div>
   )
