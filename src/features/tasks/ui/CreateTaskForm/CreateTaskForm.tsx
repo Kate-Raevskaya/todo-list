@@ -105,36 +105,28 @@ export const CreateTaskForm = ({
       onSetInputValue()
     }
 
+    const newTask: Task = {
+      ...myTask,
+      files: files.map(file => {
+        const fileId =
+          typeof file.serverId === "string"
+            ? file.serverId
+            : Date.now().toString()
+        return {
+          id: fileId,
+          name: file.file.name,
+          size: file.file.size,
+          type: file.file.type,
+        }
+      }),
+    }
+
     if (mode === "edit") {
-      dispatch(
-        editTask({
-          ...myTask,
-          files: files.map(file => {
-            return {
-              id: file.serverId,
-              name: file.file.name,
-              size: file.file.size,
-              type: file.file.type,
-            }
-          }),
-        }),
-      )
+      dispatch(editTask(newTask))
       onCloseModal()
     }
     if (mode === "create") {
-      dispatch(
-        addTask({
-          ...myTask,
-          files: files.map(file => {
-            return {
-              id: file.serverId,
-              name: file.file.name,
-              size: file.file.size,
-              type: file.file.type,
-            }
-          }),
-        }),
-      )
+      dispatch(addTask(newTask))
       if (onAddSubTask) {
         onAddSubTask(myTask.id)
       }

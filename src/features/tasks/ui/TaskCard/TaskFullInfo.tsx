@@ -47,8 +47,9 @@ export const TaskFullInfo = ({ task, onCloseModal, onChangeIsEdit }: Props) => {
           Удалить задачу
         </button>
       </div>
-      <div>
-        <b>Описание:</b> {task.description}
+      <div className={cls.desc}>
+        <b>Описание:</b>
+        <span>{task.description}</span>
       </div>
       <div>
         <b>Создана:</b> {task.createdDate}
